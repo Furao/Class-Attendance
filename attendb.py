@@ -1,15 +1,14 @@
 #!/usr/bin/python
-
 import sqlite3
 
 class AttenDB():
 
     def __init__(self):
         """Interaction with the sqlite database."""
-        self.db_name
-        self.class_table = 
+        self.db_name = 'Attendance.db'
+        self.class_table = 'academy'
 
-        self.conn = sqlite3.connect('Attendance.db')
+        self.conn = sqlite3.connect(self.db_name)
         self.c = self.conn.cursor()
 
     def add_student(self, apelido="", fn="", ln=""):
