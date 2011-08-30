@@ -3,3 +3,6 @@ mainwindow: mainwindow.ui
 
 run: mainwindow
 	python main.py
+
+clean: 
+	rm *.pyc
