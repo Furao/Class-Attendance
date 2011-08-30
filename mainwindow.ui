@@ -29,7 +29,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -108,7 +108,7 @@
          <widget class="QTableView" name="availTableView"/>
         </item>
         <item>
-         <widget class="QTableView" name="AttendTableView"/>
+         <widget class="QTableView" name="attendTableView"/>
         </item>
        </layout>
       </item>
@@ -174,7 +174,7 @@
      <x>0</x>
      <y>0</y>
      <width>616</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
