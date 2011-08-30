@@ -1,7 +1,7 @@
 # Class Attendance
-------------------
-## Author: Robbie VanVossen
-------------------------
+### Author: Robbie VanVossen
+
+----
 
 Class Attendance is a simple application for keeping track of attendance using a database.
 
