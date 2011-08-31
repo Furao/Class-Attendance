@@ -9,15 +9,16 @@ class AttendDB():
         self.class_table = 'academy'
 
     def open_connection(self):
+        """Create a connection and a cursor to the given database."""
         self.conn = sqlite3.connect(self.db_name)
         self.c = self.conn.cursor()
 
     def add_student(self, apelido="", fn="", ln=""):
         """Add new student to table."""
         self.open_connection()
-        self.c.execute(\
-            "INSERT INTO students (apelido, fn, ln) VALUES (?, ?, ?)",\
-            (apelido, fn, ln))
+        self.c.execute("INSERT INTO students (apelido, fn, ln) " + \
+                       "VALUES ('" + str(apelido) + "', '" + str(fn) + \
+                       "', '" + str(ln) +"')")
         self.conn.commit()
         self.close_connection()
 
@@ -44,6 +45,7 @@ class AttendDB():
         return students
 
     def get_students(self):
+        """Get all of the students."""
         self.open_connection()
         students = []
         self.c.execute("SELECT * FROM students")
@@ -53,20 +55,19 @@ class AttendDB():
         self.close_connection()
         return students
 
-    def student_attended(self, sid, curr_date):
+    def student_attend(self, sid, curr_date):
         """Add students attendance to table."""
         self.open_connection()
-        self.c.execute(\
-            "INSERT INTO academy (Sid, classDate) VALUES ("+str(sid)+", '"+str(curr_date)+"')")
+        self.c.execute("INSERT INTO academy (Sid, classDate) VALUES (" + \
+                        str(sid)+", '"+str(curr_date)+"')")
         self.conn.commit()
         self.close_connection()
 
     def student_deattend(self, sid, curr_date):
         """Rmove student attendance from table."""
         self.open_connection()
-        self.c.execute(\
-            "DELETE FROM academy WHERE Sid=? AND classDate=?",\
-            (sid, curr_date))
+        self.c.execute("DELETE FROM academy WHERE Sid='" + str(sid) + "' " + \
+                       "AND classDate='" + str(curr_date) + "'")
         self.conn.commit()
         self.close_connection()
 
@@ -76,26 +77,5 @@ class AttendDB():
         self.conn.close()
 
 if __name__ == '__main__':
-    import datetime
-
-    today = datetime.date.today()
-    oneago = datetime.date(2011, 8, 17)
-    diff = oneago-today
-    
-    a = AttenDB()
-    curr_date = str(oneago)
-    students = a.get_attendace_for_date(curr_date)
-    print "%i students present on %s\n---------" % (len(students), curr_date)
-    for student in students:
-        print student[0]
-    #a.add_student('Nickname', 'dude', 'meister')
-    #print "\nAdded student\n-------------------"
-    #students = a.get_students()
-    #for student in students:
-    #    print student[1]
-    #a.remove_student('Nickname', 'dude', 'meister')
-    #print "\nRemoved Student\n-------------------"
-    #students = a.get_students()
-    #for student in students:
-    #    print student[1]
-    #a.close_connection()
+    # TODO - Testing
+    pass
