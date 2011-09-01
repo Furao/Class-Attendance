@@ -6,3 +6,4 @@ run: mainwindow
 
 clean: 
 	rm *.pyc
+	rm *~
