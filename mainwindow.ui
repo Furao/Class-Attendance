@@ -6,55 +6,144 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>616</width>
-    <height>576</height>
+    <width>381</width>
+    <height>512</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Attendance</string>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame">
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>0</y>
-      <width>461</width>
-      <height>531</height>
+      <x>10</x>
+      <y>10</y>
+      <width>361</width>
+      <height>451</height>
      </rect>
     </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>80</y>
-       <width>411</width>
-       <height>301</height>
+       <y>20</y>
+       <width>320</width>
+       <height>411</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QLabel" name="dateLabel">
-          <property name="text">
-           <string>Current Date:</string>
+         <widget class="QCalendarWidget" name="calendarWidget">
+          <property name="minimumDate">
+           <date>
+            <year>1752</year>
+            <month>10</month>
+            <day>14</day>
+           </date>
+          </property>
+          <property name="gridVisible">
+           <bool>true</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QCalendarWidget::SingleSelection</enum>
+          </property>
+          <property name="horizontalHeaderFormat">
+           <enum>QCalendarWidget::SingleLetterDayNames</enum>
+          </property>
+          <property name="verticalHeaderFormat">
+           <enum>QCalendarWidget::NoVerticalHeader</enum>
+          </property>
+          <property name="navigationBarVisible">
+           <bool>true</bool>
+          </property>
+          <property name="dateEditEnabled">
+           <bool>true</bool>
           </property>
          </widget>
-        </item>
-        <item>
-         <widget class="QDateEdit" name="dateEdit"/>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Students Available:</string>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Students Attended:</string>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QListView" name="availListView">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::MultiSelection</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QListView" name="attendListView">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::MultiSelection</enum>
+          </property>
+          <property name="uniformItemSizes">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
@@ -80,103 +169,11 @@
           <property name="text">
            <string>Add</string>
           </property>
-          <property name="autoRepeat">
-           <bool>true</bool>
-          </property>
-          <property name="autoDefault">
-           <bool>false</bool>
-          </property>
-          <property name="default">
-           <bool>false</bool>
-          </property>
-          <property name="flat">
-           <bool>false</bool>
-          </property>
          </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="availLabel">
-          <property name="text">
-           <string>Available Students:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="AttendLabel">
-          <property name="text">
-           <string>Attended:</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QListWidget" name="availListWidget"/>
-        </item>
-        <item>
-         <widget class="QListWidget" name="attendListWidget"/>
         </item>
        </layout>
       </item>
      </layout>
-    </widget>
-   </widget>
-   <widget class="QFrame" name="frame_2">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>161</width>
-      <height>531</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>150</y>
-       <width>62</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>180</y>
-       <width>62</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
-    </widget>
-    <widget class="QTreeView" name="treeView">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>250</y>
-       <width>121</width>
-       <height>121</height>
-      </rect>
-     </property>
     </widget>
    </widget>
   </widget>
@@ -185,23 +182,42 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>616</width>
-     <height>22</height>
+     <width>381</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew_Class_Database"/>
-    <addaction name="actionOpen_Class_Database"/>
+    <widget class="QMenu" name="menuDatabase">
+     <property name="title">
+      <string>Database</string>
+     </property>
+     <addaction name="actionNew"/>
+     <addaction name="actionOpen"/>
+    </widget>
+    <widget class="QMenu" name="menuClass">
+     <property name="title">
+      <string>Class</string>
+     </property>
+     <addaction name="actionNew_2"/>
+     <addaction name="actionOpen_2"/>
+    </widget>
+    <addaction name="menuDatabase"/>
+    <addaction name="menuClass"/>
+    <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuClass">
+   <widget class="QMenu" name="menuEdit">
     <property name="title">
-     <string>Class</string>
+     <string>Edit</string>
     </property>
-    <addaction name="actionAdd_Student"/>
-    <addaction name="actionRemove_Students"/>
+   </widget>
+   <widget class="QMenu" name="menuStudent">
+    <property name="title">
+     <string>Student</string>
+    </property>
+    <addaction name="actionEdit_Students"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -210,28 +226,49 @@
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuClass"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuStudent"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionNew_Class_Database">
+  <action name="actionNew_Database">
    <property name="text">
-    <string>New Class Database</string>
+    <string>New Database</string>
    </property>
   </action>
-  <action name="actionOpen_Class_Database">
+  <action name="actionOpen_Database">
    <property name="text">
-    <string>Open Class Database</string>
+    <string>Open Database</string>
    </property>
   </action>
-  <action name="actionAdd_Student">
+  <action name="actionNew">
    <property name="text">
-    <string>Add Student</string>
+    <string>New</string>
    </property>
   </action>
-  <action name="actionRemove_Students">
+  <action name="actionOpen">
    <property name="text">
-    <string>Remove Student</string>
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionNew_2">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionOpen_2">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionEdit_Students">
+   <property name="text">
+    <string>Edit Students</string>
    </property>
   </action>
   <action name="actionAbout">

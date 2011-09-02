@@ -16,7 +16,7 @@ class Main(QtGui.QMainWindow):
 
         # Set date to today
         self.date = QtCore.QDate.currentDate()
-        self.ui.dateEdit.setDate(self.date)
+        self.ui.calendarWidget.setSelectedDate(self.date)
 
         # Date format for SQLite
         self.date_format = "yyyy-MM-dd"
@@ -27,100 +27,103 @@ class Main(QtGui.QMainWindow):
         # Create Attendance DB Connection Object
         self.db = AttendDB()
 
+        # Create list models
+        self.availModel = QtGui.QStandardItemModel(0, 2)
+        self.attendModel = QtGui.QStandardItemModel(0, 2)
+
+        self.ui.availListView.setModel(self.availModel)
+        self.ui.attendListView.setModel(self.attendModel)
+
         # Connect signals to handlers
         self.connect(self.ui.addButton, QtCore.SIGNAL("clicked()"), \
                 self.on_add_clicked)
         self.connect(self.ui.removeButton, QtCore.SIGNAL("clicked()"), \
                 self.on_remove_clicked)
-        self.connect(self.ui.dateEdit, \
-                QtCore.SIGNAL("dateChanged(const QDate&)"), \
+        self.connect(self.ui.calendarWidget, \
+                QtCore.SIGNAL("selectionChanged()"), \
                 self.on_date_change)
 
-        # Enable sorting on the list widgets
-        self.ui.attendListWidget.setSortingEnabled(True)
-        self.ui.availListWidget.setSortingEnabled(True)
-
         # Update the lists to reflect the current date
-        self.update_views(self.date)
+        self.update_views()
 
-    def on_date_change(self, date):
+    def on_date_change(self):
         """Update views when the date is changed."""
-        self.update_views(date)
+        self.date = self.ui.calendarWidget.selectedDate()
+        self.update_views()
 
-    def update_views(self, date):
+    def update_views(self):
         """Refresh the students available and attending for the given date."""
-        self.date = date
-
         # Get correct date format
-        self.date_string = date.toString(self.date_format)
-
-        # Get student attendance for the given date
-        self.curr_students = self.db.get_attendance_for_date(self.date_string)
-
-        # Clear the items in the list
-        self.ui.attendListWidget.clear()
-        self.ui.availListWidget.clear()
-
-        # Check to see if a student has a nickname
-        # If not, use their first and last name
-        for item in self.curr_students:
-            if item[1] != None:
-                name = str(item[1])
-            else:
-                name = str(item[2]) + ' ' + str(item[3])
-            # Add student to the attended list view
-            self.ui.attendListWidget.addItem(name)
+        self.date_string = self.date.toString(self.date_format)
         
-        # Get all students
-        self.students = self.db.get_students()
+        # Clear Models
+        self.availModel.clear()
+        self.attendModel.clear()
+        
+        for student in self.db.get_attendance_for_date(self.date_string):
+            if student[1] != None:
+                name = str(student[1])
+            else:
+                name = str(student[2]) + ' ' + str(student[3])
+            # Add student to the attended list view
+            itemlist = [QtGui.QStandardItem(name), \
+                    QtGui.QStandardItem(str(student[0]))]
+            self.attendModel.appendRow(itemlist)
 
-        # Check to see if a student has a nickname
-        # If not, use their first and last name
-        for item in self.students:
-            # Dont add them to available list if they attended given date
-            if item not in self.curr_students:
-                if item[1] != None:
-                    name = str(item[1])
-                else:
-                    name = str(item[2]) + ' ' + str(item[3])
-                # Add student to available list view
-                self.ui.availListWidget.addItem(name)
 
-            # Add student and Sid to student dictionary
-            self.student_dict[name] = item[0]
+        for student in self.db.get_students():
+            # Don't add them to available list if they attended given date
+            if student[1] != None:
+                name = str(student[1])
+            else:
+                name = str(student[2]) + ' ' + str(student[3])
+            # Add student to available list view
+            itemlist = [QtGui.QStandardItem(name), \
+                    QtGui.QStandardItem(str(student[0]))]
+            if self.attendModel.findItems(name) == []:
+                self.availModel.appendRow(itemlist)
 
+
+        self.availModel.sort(0)
+        self.attendModel.sort(0)
+
+    
     def on_add_clicked(self):
         """Move student from available to attended list."""
-        # Get selected item in list
-        ci = self.ui.availListWidget.currentItem()
-        # Convert to string
-        curr_student =  str(ci.text())
-        try:
-            # Actually add the student for the date into the database
-            self.db.student_attend(self.student_dict[curr_student], \
-                    self.date_string)
-            self.update_views(self.date)
-        except KeyError:
-            # Display error window if student missing
-            err_msg = QtGui.QErrorMessage()
-            err_msg.showMessage("Sid nto found for student %s" % curr_student) 
+        selected_indexes = self.ui.availListView.selectedIndexes()
+        for index in selected_indexes:
+            row = self.availModel.itemFromIndex(index).row()
+            #rowList = self.availModel.takeRow(row)
+            student = self.availModel.item(row, 0).text()
+            sid = self.availModel.item(row, 1).text()
+            try:
+                # Actually add the student for the date into the database
+                self.db.student_attend(sid, self.date_string)
+            except KeyError:
+                # Display error window if student missing
+                err_msg = QtGui.QErrorMessage()
+                err_msg.showMessage("Sid not found for student %s" % student)
+
+        self.update_views()
+        
 
 
     def on_remove_clicked(self):
         """Move student from attended to available list."""
-        # Get selected item in list
-        ci = self.ui.attendListWidget.currentItem()
-        # Convert to string
-        curr_student =  str(ci.text())
-        try:
-            # Actually remove the student for the date from the database
-            self.db.student_deattend(self.student_dict[curr_student], \
-                    self.date_string)
-            self.update_views(self.date)
-        except KeyError:
-            # Display error window if student missing
-            err_msg = QtGui.QErrorMessage()
-            err_msg.showMessage("Sid nto found for student %s" % curr_student) 
+        selected_indexes = self.ui.attendListView.selectedIndexes()
+        for index in selected_indexes:
+            row = self.attendModel.itemFromIndex(index).row()
+            student = self.attendModel.item(row, 0).text()
+            sid = self.attendModel.item(row, 1).text()
+            try:
+                # Actually add the student for the date into the database
+                self.db.student_deattend(sid, self.date_string)
+            except KeyError:
+                # Display error window if student missing
+                err_msg = QtGui.QErrorMessage()
+                err_msg.showMessage("Sid not found for student %s" % student)
+
+        self.update_views()
     
 def main():
     app = QtGui.QApplication(sys.argv)
