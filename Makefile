@@ -1,7 +1,12 @@
-mainwindow: mainwindow.ui
+all: mainwindow.py studentswindow.py
+
+mainwindow.py: mainwindow.ui
 	pyuic4 mainwindow.ui -o mainwindow.py
 
-run: mainwindow
+studentswindow.py: students.ui
+	pyuic4 students.ui -o studentswindow.py
+
+run: all
 	python main.py
 
 clean: 
