@@ -13,6 +13,7 @@ class Students(QtGui.QDialog):
         self.dialog.setupUi(self)
 
         self.sid = None
+        self.adding = False
 
         header = ['Sid','Apelido', 'First Name', 'Last Name']
         self.dialog.studentTableWidget.setHorizontalHeaderLabels(header)
@@ -22,6 +23,8 @@ class Students(QtGui.QDialog):
                      self._on_cell_click)
         self.connect(self.dialog.updateButton, QtCore.SIGNAL("clicked()"), \
                     self._on_update_click)
+        self.connect(self.dialog.newButton, QtCore.SIGNAL("clicked()"), \
+                    self._on_new_click)
 
         self.db = AttendDB()
 
@@ -55,9 +58,8 @@ class Students(QtGui.QDialog):
 
     def _on_cell_click(self, row, column):
         """Fill out the entries when a cell is clicked."""
+        # Get selected row
         items = self.dialog.studentTableWidget.selectedItems()
-        #for item in items:
-        #    print item.text()
 
         # Set the input fields
         self.dialog.nickNameInput.setText(items[1].text())
@@ -66,20 +68,26 @@ class Students(QtGui.QDialog):
 
     def _on_update_click(self):
         """Update current student or add new student."""
-        items = self.dialog.studentTableWidget.selectedItems()
-        self.sid = str(items[0].text())
+        # Get filled in information
         apelido = str(self.dialog.nickNameInput.text())
         fn = str(self.dialog.firstNameInput.text())
         ln = str(self.dialog.lastNameInput.text())
 
-        self.db.update_student(self.sid, apelido, fn, ln)
+        if self.adding:
+            self.sid = self.db.add_student(apelido, fn, ln)
+            self.dialog.studentTableWidget.setEnabled(True)
+        else:
+            items = self.dialog.studentTableWidget.selectedItems()
+            self.sid = str(items[0].text())
         
+            self.db.update_student(self.sid, apelido, fn, ln)
+        
+        self.adding = False
         self._update_list()
 
     def _on_new_click(self):
-
-
-        #self.dialog.studentTableWidget.clear()
+        self.adding = True
+        self.dialog.studentTableWidget.setEnabled(False)
 
 #class TableModel(QtCore.QAbstractTableModel):
 
