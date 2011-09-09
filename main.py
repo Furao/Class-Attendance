@@ -4,6 +4,7 @@ import sys
 from PyQt4 import QtCore, QtGui
 from mainwindow import Ui_MainWindow
 from attendb import AttendDB
+from students import Students
 
 class Main(QtGui.QMainWindow):
     
@@ -43,8 +44,16 @@ class Main(QtGui.QMainWindow):
                 QtCore.SIGNAL("selectionChanged()"), \
                 self.on_date_change)
 
+        self.connect(self.ui.actionEdit_Students, \
+                QtCore.SIGNAL("triggered()"), \
+                self.on_edit_students_select)
         # Update the lists to reflect the current date
         self.update_views()
+
+    def on_edit_students_select(self):
+        """Open the editing student window."""
+        edit_window = Students()
+        edit_window.exec_()
 
     def on_date_change(self):
         """Update views when the date is changed."""
