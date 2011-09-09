@@ -138,6 +138,7 @@ def main():
     app = QtGui.QApplication(sys.argv)
     window=Main()
     window.show()
+    window.raise_()
 
     sys.exit(app.exec_())
 
