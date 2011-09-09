@@ -12,6 +12,8 @@ class Students(QtGui.QDialog):
         self.dialog = Ui_studentsDialog()
         self.dialog.setupUi(self)
 
+        self.sid = None
+
         header = ['Sid','Apelido', 'First Name', 'Last Name']
         self.dialog.studentTableWidget.setHorizontalHeaderLabels(header)
 
@@ -27,17 +29,27 @@ class Students(QtGui.QDialog):
 
     def _update_list(self):
         """Refresh the student list."""
-        self.dialog.studentTableWidget.clearContents()
+        #for i in range(self.dialog.studentTableWidget.rowCount()):
+        #    self.dialog.studentTableWidget.removeRow(i)
+        self.dialog.studentTableWidget.clear()
 
+        rows = self.dialog.studentTableWidget.rowCount()
         students = self.db.get_students()
+
+        while(rows < len(students)):
+            self.dialog.studentTableWidget.insertRow(rows)
+            rows += 1
     
         for i, student in enumerate(students):
-            self.dialog.studentTableWidget.insertRow(i)
+            #self.dialog.studentTableWidget.insertRow(i)
             for j, item in enumerate(student):
                 if item == None:
                     item = ''
                 newitem = QtGui.QTableWidgetItem(str(item))
                 self.dialog.studentTableWidget.setItem(i, j, newitem)
+            if self.sid != None and str(student[0]) == str(self.sid):
+                self.dialog.studentTableWidget.setCurrentItem(newitem)
+
 
         self.dialog.studentTableWidget.sortItems(1)
 
@@ -55,7 +67,19 @@ class Students(QtGui.QDialog):
     def _on_update_click(self):
         """Update current student or add new student."""
         items = self.dialog.studentTableWidget.selectedItems()
-        print items[0].text()
+        self.sid = str(items[0].text())
+        apelido = str(self.dialog.nickNameInput.text())
+        fn = str(self.dialog.firstNameInput.text())
+        ln = str(self.dialog.lastNameInput.text())
+
+        self.db.update_student(self.sid, apelido, fn, ln)
+        
+        self._update_list()
+
+    def _on_new_click(self):
+
+
+        #self.dialog.studentTableWidget.clear()
 
 #class TableModel(QtCore.QAbstractTableModel):
 

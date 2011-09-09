@@ -31,6 +31,17 @@ class AttendDB():
         self.conn.commit()
         self.close_connection()
 
+    def update_student(self, sid, apelido, fn, ln):
+        """Update given student."""
+        self.open_connection()
+        self.c.execute("UPDATE students " + \
+                       "SET apelido='" + apelido + "', " + \
+                       "fn='" + fn + "', " + \
+                       "ln='" + ln + "' " + \
+                       "WHERE Sid=" + sid)
+        self.conn.commit()
+        self.close_connection()
+
     def get_attendance_for_date(self, curr_date):
         """Get the students that attended class on a given date from today."""
         self.open_connection()
