@@ -70,7 +70,7 @@ class Main(QtGui.QMainWindow):
         self.attendModel.clear()
         
         for student in self.db.get_attendance_for_date(self.date_string):
-            if student[1] != None:
+            if student[1] != None and student[1] != '':
                 name = str(student[1])
             else:
                 name = str(student[2]) + ' ' + str(student[3])
@@ -82,7 +82,7 @@ class Main(QtGui.QMainWindow):
 
         for student in self.db.get_students():
             # Don't add them to available list if they attended given date
-            if student[1] != None:
+            if student[1] != None and student[1] != '':
                 name = str(student[1])
             else:
                 name = str(student[2]) + ' ' + str(student[3])

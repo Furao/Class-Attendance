@@ -1,11 +1,17 @@
 #!/usr/bin/python
 import sqlite3
+import os
 
 class AttendDB():
 
     def __init__(self):
         """Interaction with the sqlite database."""
-        self.db_name = 'Attendance.db'
+        home = os.path.expanduser("~")
+        path = os.path.join(home,"My Dropbox")
+        if not os.path.isdir(path):
+            path = os.path.join(home, "Dropbox")
+        self.db_name = os.path.join(path, 'Capo', 'Attendance', \
+                'Attendance.db')
         self.class_table = 'academy'
 
     def open_connection(self):
